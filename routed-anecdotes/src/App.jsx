@@ -88,7 +88,6 @@ const CreateNew = (props) => {
         navigate('/')
   }
 
-
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -104,7 +103,6 @@ const CreateNew = (props) => {
         <div>
           url for more info
           <input name='info' {...info} />
-
         </div>
         <button onClick={handleSubmit}>create</button>
         <button onClick={ (event)=>{
@@ -140,7 +138,6 @@ const App = () => {
 
   const [notification, setNotification] = useState('')
   
-
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
@@ -153,12 +150,10 @@ const App = () => {
 
   const vote = (id) => {
     const anecdote = anecdoteById(id)
-
     const voted = {
       ...anecdote,
       votes: anecdote.votes + 1
     }
-
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
@@ -169,12 +164,7 @@ const App = () => {
             <Menu />
             {notification}
             <Routes>
-                <Route path='/' element={
-                
-                        <AnecdoteList anecdotes={anecdotes} />
-                    
-
-                    }></Route>
+                <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />}></Route>
                 <Route path='/anecdote/:id' element={<Anecdote anecdotes={anecdotes}/>}></Route>
                 <Route path='/create' element={ <CreateNew addNew={addNew} />}></Route>
                 <Route path='/about' element={<About/>}></Route>
