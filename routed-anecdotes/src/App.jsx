@@ -73,12 +73,11 @@ const Footer = () => (
 const CreateNew = (props) => {
     const navigate = useNavigate()
 
-    const content = useField('text')
-    const author = useField('text')
-    const info = useField('text')
+    const {reset: contentReset,...content} = useField('text')
+    const {reset: authorReset,...author} = useField('text')
+    const {reset: infoReset,...info} = useField('text')
 
     const handleSubmit = (e) => {
-
         e.preventDefault()
         props.addNew({
             content:content.value,
@@ -89,25 +88,33 @@ const CreateNew = (props) => {
         navigate('/')
   }
 
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
-          <input name='content' type={content.type} value={content.value} onChange={content.onChange} />
+          <input name='content' {...content} />
         </div>
         <div>
           author
-          <input name='author' type={author.type} value={author.value} onChange={author.onChange} />
+          <input name='author' {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' type={info.type} value={info.value} onChange={info.onChange} />
+          <input name='info' {...info} />
 
         </div>
-        <button>create</button>
+        <button onClick={handleSubmit}>create</button>
+        <button onClick={ (event)=>{
+            event.preventDefault();
+            contentReset()
+            authorReset()
+            infoReset()
+        }}>reset</button>
       </form>
+      
     </div>
   )
 }
