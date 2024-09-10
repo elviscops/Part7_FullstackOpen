@@ -5,6 +5,9 @@ import {
     useNavigate
   } from 'react-router-dom'
 
+import  { useField } from './hooks'
+
+
 const Anecdote = ({anecdotes}) => {
     const id = useParams().id
     const anecdote = anecdotes.find( i => i.id === Number(id))    
@@ -68,17 +71,19 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
     const navigate = useNavigate()
 
+    const content = useField('text')
+    const author = useField('text')
+    const info = useField('text')
+
     const handleSubmit = (e) => {
+
         e.preventDefault()
         props.addNew({
-            content,
-            author,
-            info,
+            content:content.value,
+            author:author.value,
+            info:info.value,
             votes: 0
         })
         navigate('/')
@@ -90,15 +95,16 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' type={content.type} value={content.value} onChange={content.onChange} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name='author' type={author.type} value={author.value} onChange={author.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info' type={info.type} value={info.value} onChange={info.onChange} />
+
         </div>
         <button>create</button>
       </form>
@@ -126,11 +132,12 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+  
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
-    setNotification('New Anecdote added: '+anecdote.content)
+    setNotification('New Anecdote added: ' + anecdote.content)
     window.setTimeout(()=>(setNotification('')),5000)
   }
 
