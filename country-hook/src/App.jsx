@@ -31,6 +31,7 @@ const useCountry = (name) => {
 
         if (name) {
             getCountryData(name).then((countryData) => {
+                console.log(countryData.data)
                 setCountry(countryData);
             })
         }
@@ -57,8 +58,7 @@ const Country = ({ country }) => {
       <h3>{country.data.name.common} </h3>
       <div>capital {country.data.capital} </div>
       <div>population {country.data.population}</div> 
-      <div>{country.data.flag}</div>
-      {/* <img src={country.data.flag} height='100' alt={`flag of ${country.data.name.common}`}/>   */}
+      <img src={country.data.flags.png} height='100' alt={`flag of ${country.data.name.common}`}/>  
     </div>
   )
 }
