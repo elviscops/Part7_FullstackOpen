@@ -6,21 +6,24 @@ import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
-const Notification = ({ message, mood }) => {
-  const notificationClass = mood
-    ? "notificationPositive"
-    : "notificationNegative";
-  if (message === null) {
-    return null;
-  }
-  return <div className={notificationClass}>{message}</div>;
-};
+import Notification from './components/Notification'
+import { useMessageDispatch } from './messageContext'
+
+// const Notification = ({ message, mood }) => {
+//   const notificationClass = mood
+//     ? "notificationPositive"
+//     : "notificationNegative";
+//   if (message === null) {
+//     return null;
+//   }
+//   return <div className={notificationClass}>{message}</div>;
+// };
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [notificationMood, setNotificationMood] = useState(true);
+  const { showNotification } = useMessageDispatch()
+
 
   const blogFormRef = useRef();
 
@@ -28,9 +31,6 @@ const App = () => {
     blogService.getAll().then((blogs) => {
       const blogList = blogs.sort((a, b) => b.likes - a.likes);
       setBlogs(blogList);
-      setTimeout(() => {
-        setNotificationMessage(null, false);
-      }, 0);
     });
   }, []);
 
@@ -50,16 +50,13 @@ const App = () => {
 
   const loginUser = async ({ username, password }) => {
     try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-      setUser(user);
-      blogService.setToken(user.token);
+        const user = await loginService.login({ username, password });
+        window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+        showNotification([`logged in ${user.username}`,true])
+        setUser(user);
+        blogService.setToken(user.token);
     } catch (exception) {
-      setNotificationMessage("Wrong username or password", true);
-      setNotificationMood(false);
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+        showNotification([`Wrong username or password`,false])
     }
   };
 
@@ -68,14 +65,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility();
       const blog = await blogService.create(newBlog);
       setBlogs(blogs.concat(blog));
-      setNotificationMessage(
-        `New Blog: ${blog.title} by ${blog.author} added`,
-        true
-      );
-      setNotificationMood(true);
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+      showNotification([`New Blog: ${blog.title} by ${blog.author} added`,true])
     } catch (exception) {
       console.log(exception);
     }
@@ -103,10 +93,7 @@ const App = () => {
       {user === null && (
         <div>
           <div>
-            <Notification
-              message={notificationMessage}
-              mood={notificationMood}
-            />
+            <Notification />
           </div>
           <div>
             <LoginForm loginUser={loginUser} />
@@ -119,8 +106,6 @@ const App = () => {
           <div>
             <div>
               <Notification
-                message={notificationMessage}
-                mood={notificationMood}
               />
             </div>
             <div>{user.username} has been logged in: </div>
