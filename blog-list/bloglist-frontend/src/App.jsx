@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Blog from "./components/Blog";
 import BlogForms from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-
 import Notification from './components/Notification'
 import { showNotification, useMessageDispatch } from './Context/messageContext'
 import { useBlogContent, useBlogDispatch } from './Context/blogContext'
@@ -81,9 +79,7 @@ const App = () => {
     } catch (exception) {
         console.log(exception)
     }
-    blogService.getAll()
-                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
-
+    blogService.getAll().then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
   };
 
   const deleteBlogPost = async (id) => {
