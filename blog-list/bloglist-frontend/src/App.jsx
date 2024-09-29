@@ -9,21 +9,20 @@ import loginService from "./services/login";
 
 import Notification from './components/Notification'
 import { showNotification, useMessageDispatch } from './Context/messageContext'
+import { useBlogContent, useBlogDispatch } from './Context/blogContext'
 
 
 const App = () => {
-    const queryClient = useQueryClient()
     const [user, setUser] = useState(null);
     const notificationDispatch = useMessageDispatch();
+    const blogs = useBlogContent();
+    const blogDispatch = useBlogDispatch();
     const blogFormRef = useRef();
 
-    const {data}  = useQuery({
-        queryKey:['blogs'],
-        queryFn: blogService.getAll,
-        retry:true
-        })       
-        
-    const blogs = data /// Refresh does not fetch data!!!
+    useEffect(() => {
+        blogService.getAll()
+                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
+    }, [blogDispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
@@ -43,32 +42,58 @@ const App = () => {
     try {
         const user = await loginService.login({ username, password });
         window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-        //showNotification(notificationDispatch,`logged in ${user.username}`,true,3)
         showNotification(notificationDispatch,
-                "message",
+               `logged in ${user.username}`,
                 true,
-                1)
+                3)
         setUser(user);
         blogService.setToken(user.token);
     } catch (exception) {
         console.log(exception)
-        //showNotification([`Wrong username or password`,false])
+        showNotification(notificationDispatch,
+            `Wrong username or password`,
+             false,
+             3)
     }
   };
 
-//   const likeBlogPost = async (likedBlog) => {
-//     await blogService.like(likedBlog.id, likedBlog);
-//     const blogs = await blogService.getAll().then((blogs) => {
-//       const blogList = blogs.sort((a, b) => b.likes - a.likes);
-//     });
-//   };
+  const createNewBlog = async (newBlog) => {
+    try {
+        const response = await blogService.create(newBlog)
+        blogDispatch({type: "CREATE", payload: response})
+        showNotification(notificationDispatch,
+            `New Blog: ${newBlog.title} by ${newBlog.author} added`,
+            false,
+            3)
+    } catch (exception) {
+        console.log(exception)
+        showNotification(notificationDispatch,
+            `tried creating, but content too short-'${error}'`,
+            false,
+            3)
+    }
+  };
 
-//   const deleteBlogPost = async (id) => {
-//     await blogService.deleteBlog(id);
-//     const blogs = await blogService.getAll().then((blogs) => {
-//       const blogList = blogs.sort((a, b) => b.likes - a.likes);
-//     });
-//   };
+  const likeBlogPost = async (id,likedBlog) => {
+    try {
+        await blogService.like(id,likedBlog);
+        blogDispatch({type: "LIKE", payload: likedBlog})
+    } catch (exception) {
+        console.log(exception)
+    }
+    blogService.getAll()
+                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
+
+  };
+
+  const deleteBlogPost = async (id) => {
+    try {
+        await blogService.deleteBlog(id)
+        blogDispatch({type: "DELETE", payload: id})
+    } catch (exception) {
+        console.log(exception)
+    }
+  };
 
 
 
@@ -102,19 +127,18 @@ const App = () => {
           <br></br>
           <div className="addBlogForm">
             <Togglable buttonLabel="Add New Blog" ref={blogFormRef}>
-              <BlogForms />
+              <BlogForms createNewBlog={createNewBlog}/>
             </Togglable>
             <br></br>
           </div>
           <div>
             {
-
             blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
               <Blog
                 key={blog.id}
                 blog={blog}
-                //likeBlogPost={likeBlogPost}
-                //deleteBlogPost={deleteBlogPost}
+                likeBlogPost={likeBlogPost}
+                deleteBlogPost={deleteBlogPost}
                 username={user.username}
               />
             ))}

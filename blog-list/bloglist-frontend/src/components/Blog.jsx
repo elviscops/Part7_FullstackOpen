@@ -16,7 +16,7 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
 
   const likeBlog = () => {
     setBlogLikes(blogLikes + 1);
-    likeBlogPost(tmpBlog);
+    likeBlogPost(tmpBlog.id,tmpBlog);
   };
 
   const deleteBlog = (id) => {

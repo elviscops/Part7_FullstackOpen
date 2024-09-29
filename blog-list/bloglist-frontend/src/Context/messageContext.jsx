@@ -26,8 +26,11 @@ export const showNotification = (dispatch, message, mood, timeout) => {
 const MessageContext = createContext()
 
 export const MessageContextProvider = (props) => {
-    const [message,  messageDispatch] = useReducer(messageReducer,{message: null, mood: null,timeout:0})
-
+    const [message,  messageDispatch] = useReducer(messageReducer,{
+                                                    message: null, 
+                                                    mood: null,
+                                                    timeout:0
+                                                })
     return (
         <MessageContext.Provider value={[message,messageDispatch]}>
             {props.children}

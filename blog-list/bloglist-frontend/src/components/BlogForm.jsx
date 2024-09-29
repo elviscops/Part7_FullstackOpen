@@ -1,51 +1,55 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { showNotification,useMessageDispatch } from '../Context/messageContext'
 
-const BlogForm = () => {
-    const queryClient = useQueryClient();
-    //const notificationDispatch = useMessageDispatch()
+const BlogForm = ({createNewBlog}) => {
+    const [title, setTitle] = useState([]);
+    const [author, setAuthor] = useState([]);
+    const [blogURL, setBlogURL] = useState([]);
 
-  const handleAddBlog = async (event) => {
-    event.preventDefault();
-    const title = event.target.title.value
-    const author = event.target.author.value
-    const url = event.target.url.value
-    newBlogMutation.mutate({ title: title, author:author, url:url, votes: 0 })
-    event.target.reset();
-  };
-
-  const newBlogMutation = useMutation({
-      mutationFn: blogService.create,
-      onSuccess: (newBlog) => {
-          const blogs = queryClient.getQueryData(['blogs'])
-          queryClient.setQueryData('blogs', blogs.concat(newBlog))
-          queryClient.invalidateQueries({ queryKey: ["blogs"] });
-          //showNotification(notificationDispatch,`New Blog: ${newBlog.title} by ${newBlog.author} added`,true,3)
-      }, 
-      onError: (error) => {
-          //showNotification(`tried creating, but content too short-'${error}'`)
-      }, 
-  });
-
+    const handleAddBlog = async (event) => {
+      event.preventDefault();
+      createNewBlog({
+        title: title,
+        author: author,
+        url: blogURL,
+      });
+      setTitle("");
+      setAuthor("");
+      setBlogURL("");
+    };
+  
   return (
     <div>
       <h2>Add new Blog</h2>
       <form onSubmit={handleAddBlog}>
         <div>
           Title:{" "}
-          <input name='title'/>
+          <input
+            type="text"
+            id="blogtitle"
+            placeholder="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
         </div>
         <div>
           Author:{" "}
           <input
-            name='author'
+            type="text"
+            id="blogauthor"
+            placeholder="author"
+            value={author}
+            onChange={(event) => setAuthor(event.target.value)}
           />
         </div>
         <div>
           Link:{" "}
-          <input name='url'/>
+          <input
+            type="text"
+            id="blogurl"
+            placeholder="url"
+            value={blogURL}
+            onChange={(event) => setBlogURL(event.target.value)}
+          />
         </div>
         <button id="addblogBtn" type="submit">
           Add
