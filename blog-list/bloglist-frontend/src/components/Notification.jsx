@@ -1,15 +1,17 @@
-import { useMessageDispatch } from '../messageContext'
+import { useMessageContent } from '../Context/messageContext'
 
 const Notification = () => {
 
-    const {message} = useMessageDispatch()
+    const message = useMessageContent()
+    console.log("Notif Message",message)
 
-    if (!message) return null
-    const notificationClass = message[1] ? 'notificationPositive' : 'notificationNegative'
+    if (message === null || message.message === null) return null;
+
+    const notificationClass = message.mood ? 'notificationPositive' : 'notificationNegative'
 
     return (
         <div className={notificationClass} >
-            <h2>{message[0]}</h2>
+            <h2>{message.message}</h2>
         </div>
     )
 }

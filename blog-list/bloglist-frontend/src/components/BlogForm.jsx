@@ -1,11 +1,11 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMessageDispatch } from '../messageContext'
+import { showNotification,useMessageDispatch } from '../Context/messageContext'
 
 const BlogForm = () => {
     const queryClient = useQueryClient();
-    const { showNotification } = useMessageDispatch()
+    //const notificationDispatch = useMessageDispatch()
 
   const handleAddBlog = async (event) => {
     event.preventDefault();
@@ -22,10 +22,10 @@ const BlogForm = () => {
           const blogs = queryClient.getQueryData(['blogs'])
           queryClient.setQueryData('blogs', blogs.concat(newBlog))
           queryClient.invalidateQueries({ queryKey: ["blogs"] });
-          showNotification([`New Blog: ${newBlog.title} by ${newBlog.author} added`,true])
+          //showNotification(notificationDispatch,`New Blog: ${newBlog.title} by ${newBlog.author} added`,true,3)
       }, 
       onError: (error) => {
-          showNotification(`tried creating, but content too short-'${error}'`)
+          //showNotification(`tried creating, but content too short-'${error}'`)
       }, 
   });
 

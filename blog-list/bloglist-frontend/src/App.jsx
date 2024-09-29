@@ -8,34 +8,30 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 import Notification from './components/Notification'
-import { useMessageDispatch } from './messageContext'
+import { showNotification, useMessageDispatch } from './Context/messageContext'
 
 
 const App = () => {
     const queryClient = useQueryClient()
     const [user, setUser] = useState(null);
-    const { showNotification } = useMessageDispatch()
+    const notificationDispatch = useMessageDispatch();
     const blogFormRef = useRef();
 
-const {data}  = useQuery({
-    queryKey:['blogs'],
-    queryFn: blogService.getAll,
-    retry:true
-    })       
-    
-let blogs = data /// Refresh does not fetch data!!!
-
+    const {data}  = useQuery({
+        queryKey:['blogs'],
+        queryFn: blogService.getAll,
+        retry:true
+        })       
+        
+    const blogs = data /// Refresh does not fetch data!!!
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
     if (loggedUserJSON) {
-
         const user = JSON.parse(loggedUserJSON);
         setUser(user);
         blogService.setToken(user.token)
-        
     }
-    
   }, []);
 
   const logoutUser = async (event) => {
@@ -47,12 +43,16 @@ let blogs = data /// Refresh does not fetch data!!!
     try {
         const user = await loginService.login({ username, password });
         window.localStorage.setItem("loggedInUser", JSON.stringify(user));
-        showNotification([`logged in ${user.username}`,true])
+        //showNotification(notificationDispatch,`logged in ${user.username}`,true,3)
+        showNotification(notificationDispatch,
+                "message",
+                true,
+                1)
         setUser(user);
         blogService.setToken(user.token);
     } catch (exception) {
         console.log(exception)
-        showNotification([`Wrong username or password`,false])
+        //showNotification([`Wrong username or password`,false])
     }
   };
 
@@ -72,9 +72,6 @@ let blogs = data /// Refresh does not fetch data!!!
 
 
 
-
-    console.log(blogs)
-
   return (
     <div>
       <h1>Blogs List Page</h1>
@@ -93,8 +90,7 @@ let blogs = data /// Refresh does not fetch data!!!
         <div>
           <div>
             <div>
-              <Notification
-              />
+              <Notification />
             </div>
             <div>{user.username} has been logged in: </div>
             <div>
