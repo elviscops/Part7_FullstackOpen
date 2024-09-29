@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Blog from "./components/Blog";
 import BlogForms from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
@@ -9,38 +10,32 @@ import loginService from "./services/login";
 import Notification from './components/Notification'
 import { useMessageDispatch } from './messageContext'
 
-// const Notification = ({ message, mood }) => {
-//   const notificationClass = mood
-//     ? "notificationPositive"
-//     : "notificationNegative";
-//   if (message === null) {
-//     return null;
-//   }
-//   return <div className={notificationClass}>{message}</div>;
-// };
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
-  const { showNotification } = useMessageDispatch()
+    const queryClient = useQueryClient()
+    const [user, setUser] = useState(null);
+    const { showNotification } = useMessageDispatch()
+    const blogFormRef = useRef();
 
+const {data}  = useQuery({
+    queryKey:['blogs'],
+    queryFn: blogService.getAll,
+    retry:true
+    })       
+    
+let blogs = data /// Refresh does not fetch data!!!
 
-  const blogFormRef = useRef();
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      const blogList = blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogList);
-    });
-  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+
+        const user = JSON.parse(loggedUserJSON);
+        setUser(user);
+        blogService.setToken(user.token)
+        
     }
+    
   }, []);
 
   const logoutUser = async (event) => {
@@ -56,36 +51,29 @@ const App = () => {
         setUser(user);
         blogService.setToken(user.token);
     } catch (exception) {
+        console.log(exception)
         showNotification([`Wrong username or password`,false])
     }
   };
 
-  const createNewBlog = async (newBlog) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      const blog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(blog));
-      showNotification([`New Blog: ${blog.title} by ${blog.author} added`,true])
-    } catch (exception) {
-      console.log(exception);
-    }
-  };
+//   const likeBlogPost = async (likedBlog) => {
+//     await blogService.like(likedBlog.id, likedBlog);
+//     const blogs = await blogService.getAll().then((blogs) => {
+//       const blogList = blogs.sort((a, b) => b.likes - a.likes);
+//     });
+//   };
 
-  const likeBlogPost = async (likedBlog) => {
-    await blogService.like(likedBlog.id, likedBlog);
-    const blogs = await blogService.getAll().then((blogs) => {
-      const blogList = blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogList);
-    });
-  };
+//   const deleteBlogPost = async (id) => {
+//     await blogService.deleteBlog(id);
+//     const blogs = await blogService.getAll().then((blogs) => {
+//       const blogList = blogs.sort((a, b) => b.likes - a.likes);
+//     });
+//   };
 
-  const deleteBlogPost = async (id) => {
-    await blogService.deleteBlog(id);
-    const blogs = await blogService.getAll().then((blogs) => {
-      const blogList = blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogList);
-    });
-  };
+
+
+
+    console.log(blogs)
 
   return (
     <div>
@@ -118,17 +106,19 @@ const App = () => {
           <br></br>
           <div className="addBlogForm">
             <Togglable buttonLabel="Add New Blog" ref={blogFormRef}>
-              <BlogForms createNewBlog={createNewBlog} />
+              <BlogForms />
             </Togglable>
             <br></br>
           </div>
           <div>
-            {blogs.map((blog) => (
+            {
+
+            blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
               <Blog
                 key={blog.id}
                 blog={blog}
-                likeBlogPost={likeBlogPost}
-                deleteBlogPost={deleteBlogPost}
+                //likeBlogPost={likeBlogPost}
+                //deleteBlogPost={deleteBlogPost}
                 username={user.username}
               />
             ))}

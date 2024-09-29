@@ -38,10 +38,4 @@ export const useMessageDispatch = () => {
     return useContext(MessageContext)
 }
 
-
-export const useMoodDispatch = () => {
-    return useContext(MessageContext)
-}
-
-
 export default MessageContext

@@ -3,9 +3,17 @@ import App from "./App";
 import "./index.css";
 
 import {MessageContextProvider} from './messageContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <MessageContextProvider>
-        <App />
-    </MessageContextProvider>
+    <QueryClientProvider client={queryClient}>
+
+        <MessageContextProvider>
+            <App />
+        </MessageContextProvider>
+
+    </QueryClientProvider>
+    
 );
