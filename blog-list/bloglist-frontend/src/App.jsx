@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import BlogForms from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
@@ -8,13 +8,18 @@ import loginService from "./services/login";
 import Notification from './components/Notification'
 import { showNotification, useMessageDispatch } from './Context/messageContext'
 import { useBlogContent, useBlogDispatch } from './Context/blogContext'
+import { handlePassword, handleUsername, useLoginContent, useLoginDispatch } from './Context/loginContext'
+import { setUser, useUserContent, useUserDispatch } from './Context/userContext'
 
 
 const App = () => {
-    const [user, setUser] = useState(null);
     const notificationDispatch = useMessageDispatch();
     const blogs = useBlogContent();
     const blogDispatch = useBlogDispatch();
+    const login = useLoginContent();
+    const loginDispatch = useLoginDispatch();
+    const user = useUserContent();
+    const userDispatch = useUserDispatch();
     const blogFormRef = useRef();
 
     useEffect(() => {
@@ -23,29 +28,32 @@ const App = () => {
     }, [blogDispatch]);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedInUser");
-    if (loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON);
-        setUser(user);
-        blogService.setToken(user.token)
-    }
-  }, []);
+    setUser(userDispatch)
+
+  }, [userDispatch]);
 
   const logoutUser = async (event) => {
+    event.preventDefault();
     window.localStorage.removeItem("loggedInUser");
     window.localStorage.clear();
+    userDispatch({type: "CLEAR"});
+    handleUsername(loginDispatch,"")
+    handlePassword(loginDispatch,"")
   };
 
-  const loginUser = async ({ username, password }) => {
+  const loginUser = async (event) => {
+    event.preventDefault();
     try {
-        const user = await loginService.login({ username, password });
+        const user = await loginService.login({ ...login });
         window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+        userDispatch({type: "SET", payload: user});
         showNotification(notificationDispatch,
                `logged in ${user.username}`,
                 true,
                 3)
-        setUser(user);
         blogService.setToken(user.token);
+        handleUsername(loginDispatch,"")
+        handlePassword(loginDispatch,"")
     } catch (exception) {
         console.log(exception)
         showNotification(notificationDispatch,
@@ -90,9 +98,7 @@ const App = () => {
         console.log(exception)
     }
   };
-
-
-
+  
   return (
     <div>
       <h1>Blogs List Page</h1>
