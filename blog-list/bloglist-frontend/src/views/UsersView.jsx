@@ -1,31 +1,16 @@
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import UserList from "../services/usersHook";
+import {
+    BrowserRouter as Router,
+    Routes, Route, Link, useParams,
+    useNavigate, useMatch
+  } from 'react-router-dom'
 
-const useResource = (baseUrl) => {
-    const [resources, setResources] = useState([])
-  
-    useEffect(() => {
-      const getResourceList = async (url) => {
-        try{
-            const resourceData= await axios.get(url);
-            return resourceData.data;
-        }catch(error){
-            return { found: false };
-        }
-      }
-  
-      getResourceList(baseUrl).then((resourceData) => {
-          setResources(resourceData);
-      });
-    },[baseUrl])
-  
-    return [
-      resources
-    ]
-  }
+
 
 const UsersView = () => {
-    const [userList] = useResource('http://localhost:3003/api/users')
+    const [userList] = UserList.getUserList()
+
+ 
 
 return (
     <>
@@ -43,7 +28,7 @@ return (
                         {
                             userList.map((user) => (
                                 <tr key={user.id}>
-                                    <td key={user.name}>{user.name}</td>
+                                    <td key={user.name}><Link to={`/users/${user.id}`}>{user.name}</Link></td>
                                     <td key={user.blogs}>{user.blogs.length}</td>
                                 </tr>
                             ))
