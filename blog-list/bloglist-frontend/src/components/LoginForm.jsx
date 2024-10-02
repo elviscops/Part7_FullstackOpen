@@ -1,12 +1,40 @@
-import { useState } from "react";
 import { handleUsername, handlePassword,useLoginContent, useLoginDispatch } from '../Context/loginContext'
-import PropTypes from "prop-types";
+import { showNotification, useMessageDispatch } from '../Context/messageContext'
+import { setUser,useUserContent,useUserDispatch } from '../Context/userContext'
+import loginService from "../services/login";
+import blogService from "../services/blogs";
 
-const LoginForm = ({ loginUser }) => {
+const LoginForm = () => {
 
+    const userDispatch = useUserDispatch();
+    const notificationDispatch = useMessageDispatch();
     const login = useLoginContent();
     const loginDispatch = useLoginDispatch();
-
+    
+    const loginUser = async (event) => {
+       
+        event.preventDefault();
+        try {
+            const user = await loginService.login({ ...login });
+            window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+            userDispatch({type: "SET", payload: user});
+            showNotification(notificationDispatch,
+                   `logged in ${user.username}`,
+                    true,
+                    3)
+            blogService.setToken(user.token);
+            handleUsername(loginDispatch,"")
+            handlePassword(loginDispatch,"")
+            
+        } catch (exception) {
+            console.log(exception)
+            showNotification(notificationDispatch,
+                `Wrong username or password`,
+                 false,
+                 3)
+        }
+      };
+    
   return (
     <div>
       <h2>Login</h2>
@@ -41,8 +69,5 @@ const LoginForm = ({ loginUser }) => {
   );
 };
 
-LoginForm.propTypes = {
-  loginUser: PropTypes.func.isRequired,
-};
 
 export default LoginForm;

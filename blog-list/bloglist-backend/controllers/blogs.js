@@ -21,13 +21,14 @@ router.post("/", userExtractor, async (request, response) => {
     return response.status(400).json({ error: "title or url missing" });
   }
 
-  await user.save();
+  
 
   blog.likes = blog.likes | 0;
   blog.user = user;
   user.blogs = user.blogs.concat(blog._id);
 
   const savedBlog = await blog.save();
+  await user.save();
 
   response.status(201).json(savedBlog);
 });

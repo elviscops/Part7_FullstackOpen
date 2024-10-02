@@ -6,7 +6,7 @@ const Notification = () => {
     const notificationClass = message.mood ? 'notificationPositive' : 'notificationNegative'
     return (
         <div className={notificationClass} >
-            <h2>{message.message}</h2>
+            <h3>{message.message}</h3>
         </div>
     )
 }
