@@ -27,19 +27,12 @@ const App = () => {
     const user = useUserContent();
     const userDispatch = useUserDispatch();
     let [userListGet] = UserList.getUserList()
-    // const userList = useUserListContent();
-    // const userListDispatch = useUserListDispatch();
     const blogs = useBlogContent();
-
-   console.log(blogs)
-
 
     useEffect(() => {
         setUser(userDispatch)
        
     }, [userDispatch]);
-
-
 
     useEffect(() => {
         blogService.getAll()
@@ -61,8 +54,6 @@ const App = () => {
     } else {
         null
     }
-
-    console.log(matchedBlogs)
   
   return (
     <div>
@@ -72,10 +63,10 @@ const App = () => {
         <div>
             {user !== null && (
                 <>
-                    <div>
+                    <div style={{ display: 'flex', flexWrap: 'nowrap' }}>
                         <Menu />
+                        <LoggedInUser />
                     </div>
-                    <LoggedInUser />
                 </>
             )}
         </div>

@@ -18,14 +18,13 @@ const LoggedInUser = () => {
         navigate('/')
     };
 
-
-
  return (
-    <><div>{user.username} has been logged in: </div><div>
-        <form onSubmit={logoutUser}>
-            <button type="submit">Log Out</button>
+    <>
+        <span>{user.username} has been logged in: </span>
+            <form onSubmit={logoutUser} style={{ display: 'inline-block' }}>
+                <button type="submit">Log Out</button>
         </form>
-     </div></>
+     </>
  )
    
 }

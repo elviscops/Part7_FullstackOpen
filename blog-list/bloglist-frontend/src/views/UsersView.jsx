@@ -9,7 +9,6 @@ import {
 
 const UsersView = () => {
     const [userList] = UserList.getUserList()
-    console.log(userList)
 
 return (
     <>
