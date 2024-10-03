@@ -1,9 +1,18 @@
 import { useState, useRef } from "react";
 import Togglable from "../components/Togglable";
+import {
+    BrowserRouter as Router,
+    Routes, Route, Link, useParams,
+    useNavigate, useMatch
+  } from 'react-router-dom'
 
 const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
   const [blogLikes, setBlogLikes] = useState(blog.likes);
-  const blogPostRef = useRef();
+  const navigate = useNavigate()
+
+  if (!blog) {
+    return null
+}
 
   const tmpBlog = {
     title: blog.title,
@@ -22,15 +31,15 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
   const deleteBlog = (id) => {
     if (window.confirm(`Delete blog ${blog.title} by "${blog.author}`)) {
       deleteBlogPost(id);
+      navigate('/')
     }
   };
 
   return (
     <div className="blogPost">
       <div>
-        {blog.title} : {blog.author}
-        <Togglable buttonLabel="view" ref={blogPostRef}>
-          <div className="togglableContent">
+        <h2>{blog.title} : {blog.author}</h2>
+        <div className="togglableContent">
             <div className="urlView">URL: {blog.url}</div>
             <div className="likesView">
               Likes: {blog.likes}
@@ -45,7 +54,6 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
               </button>
             )}
           </div>
-        </Togglable>
       </div>
     </div>
   );

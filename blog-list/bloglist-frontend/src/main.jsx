@@ -6,6 +6,7 @@ import { MessageContextProvider } from './Context/messageContext'
 import { BlogContextProvider } from './Context/blogContext'
 import { LoginContextProvider } from './Context/loginContext'
 import { UserContextProvider } from './Context/userContext'
+import { UserListContextProvider } from './Context/userListContext'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
@@ -19,6 +20,7 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Router>
         <QueryClientProvider client={queryClient}>
+            <UserListContextProvider>
             <LoginContextProvider>
                 <UserContextProvider>
                     <BlogContextProvider>
@@ -30,6 +32,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                     </BlogContextProvider>
                 </UserContextProvider>
             </LoginContextProvider>
+            </UserListContextProvider>
+            
             </QueryClientProvider>
     </Router>
 

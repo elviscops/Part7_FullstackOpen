@@ -1,14 +1,12 @@
-import { useEffect, useState, useRef } from "react";
-import UserList from "../services/usersHook";
+import { useNavigate } from 'react-router'
+import { useEffect ,useState} from "react";
 
 
 const SingleUserView = ({user}) => {
-    
 
     if (!user) {
         return null
     }
-
 
 return (
     <>

@@ -6,6 +6,12 @@ import blogService from "../services/blogs";
 import { showNotification, useMessageDispatch } from '../Context/messageContext'
 import { useBlogContent, useBlogDispatch } from '../Context/blogContext'
 import { setUser, useUserContent, useUserDispatch } from '../Context/userContext'
+import BlogView from '../views/BlogView'
+import {
+    BrowserRouter as Router,
+    Routes, Route, Link, useParams,
+    useNavigate, useMatch
+  } from 'react-router-dom'
 
 
 
@@ -32,31 +38,11 @@ const BlogsView = () => {
                 3)
         }
       };
-    
-      const likeBlogPost = async (id,likedBlog) => {
-        try {
-            await blogService.like(id,likedBlog);
-            blogDispatch({type: "LIKE", payload: likedBlog})
-        } catch (exception) {
-            console.log(exception)
-        }
-        blogService.getAll().then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
-      };
-    
-      const deleteBlogPost = async (id) => {
-        try {
-            await blogService.deleteBlog(id)
-            blogDispatch({type: "DELETE", payload: id})
-        } catch (exception) {
-            console.log(exception)
-        }
-      };
 
  return (
         <>
             <div>
                 <div>
-                    
                     {user !== null && (
                         <div>
                             <div>
@@ -71,12 +57,9 @@ const BlogsView = () => {
                             </div>
                             <div>
                                 {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
-                                    <Blog
-                                        key={blog.id}
-                                        blog={blog}
-                                        likeBlogPost={likeBlogPost}
-                                        deleteBlogPost={deleteBlogPost}
-                                        username={user.username} />
+                                    <div key={blog.id} className="blogPost">
+                                    <Link  to={`/blog/${blog.id}`}>{blog.title} : {blog.author}</Link><br />
+                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -84,9 +67,7 @@ const BlogsView = () => {
                 </div>
             </div>
         </>
- )
-
-    
+    )
 }
 
 export default BlogsView;

@@ -2,7 +2,8 @@ import { useEffect ,useState} from "react";
 import blogService from "./services/blogs";
 import UserList from "./services/usersHook";
 import Notification from './components/Notification'
-import { useBlogDispatch } from './Context/blogContext'
+import { useBlogContent, useBlogDispatch } from './Context/blogContext'
+import {  useUserListContent, useUserListDispatch } from './Context/userListContext'
 import { setUser, useUserContent, useUserDispatch } from './Context/userContext'
 import LoggedInUser from "./components/LoggedInUser";
 import axios from "axios";
@@ -18,19 +19,27 @@ import {
     useNavigate, useMatch
   } from 'react-router-dom'
 import SingleUserView from "./views/SingleUserView";
+import BlogView from "./views/BlogView";
 
 
 const App = () => {
     const blogDispatch = useBlogDispatch();
     const user = useUserContent();
     const userDispatch = useUserDispatch();
-    const [userList] = UserList.getUserList()
+    let [userListGet] = UserList.getUserList()
+    // const userList = useUserListContent();
+    // const userListDispatch = useUserListDispatch();
+    const blogs = useBlogContent();
+
+   console.log(blogs)
 
 
     useEffect(() => {
         setUser(userDispatch)
-
+       
     }, [userDispatch]);
+
+
 
     useEffect(() => {
         blogService.getAll()
@@ -38,9 +47,22 @@ const App = () => {
     }, [blogDispatch]);
 
     const matchedUsers = useMatch("/users/:id");
-    const userSelected = matchedUsers
-    ? userList.find((u) => u.id === String(matchedUsers.params.id))
-    : null;
+    let userSelected = null
+    if ( matchedUsers != null) {
+        userSelected = userListGet.find((u) => u.id === String(matchedUsers.params.id))
+    } else {
+        null
+    }
+
+    const matchedBlogs = useMatch("/blog/:id");
+    let blogSelected = null
+    if ( matchedBlogs != null) {
+        blogSelected = blogs.find((u) => u.id === String(matchedBlogs.params.id))
+    } else {
+        null
+    }
+
+    console.log(matchedBlogs)
   
   return (
     <div>
@@ -77,6 +99,11 @@ const App = () => {
             <Route path="/users/:id" element={
                 <div>
                     <SingleUserView user={userSelected} />
+                </div>
+            }></Route>
+            <Route path="/blog/:id" element={
+                <div>
+                    <BlogView blog={blogSelected} />
                 </div>
             }></Route>
         </Routes>
