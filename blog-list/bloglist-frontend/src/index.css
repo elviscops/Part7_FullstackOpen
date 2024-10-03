@@ -17,22 +17,14 @@
   
 }
 
-.blogPost {
-  background-color: #a8a8a8;
-  padding: 5px;
-  border: 1px;
-  border-style: solid;
-  border-color: black;
-  margin: 1px;
-  border-radius: 5px;
-}
+
 .blogPost:hover {
   background-color: #bfbcbc;
   padding: 5px;
   border: 1px;
   border-style: solid;
   border-color: black;
-  margin: 1px;
+  margin: 0 25% 0 25% ;
   border-radius: 5px;
 }
 
@@ -42,14 +34,43 @@
   border: 1px;
   border-style: solid;
   border-color: black;
-  margin: 1px;
-  border-radius: 5px;
+  margin: 0 25% 0 25% ;
+  border-radius: 0px;
 }
 
 .viewHideButton {
   margin: 1px 0px 1px 15px;
 }
 
+.loginScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0; /* added background color */
+    padding: 20px; /* added padding to create a little box */
+    border: 1px solid #ccc; /* added border to create a little box */
+    border-radius: 30px; /* added border radius to create a little box */
+    margin: 10% 30% 0 30%;
+  }
+  
+  .loginScreen h2 {
+    margin-bottom: 20px;
+  }
+  
+  .loginScreen form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .loginScreen form input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
 body {
   background-color: #e9e4d8;
+  margin: 0px;
 }
+

@@ -36,7 +36,7 @@ const LoginForm = () => {
       };
     
   return (
-    <div>
+    <div className='loginScreen'>
       <h2>Login</h2>
       <form onSubmit={loginUser}>
         <div>
