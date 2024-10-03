@@ -57,13 +57,14 @@ const App = () => {
   
   return (
     <div>
-        <div>
-            <Notification />
-        </div>
+
         <div>
             {user !== null && (
                 <>
-                    <div style={{ display: 'flex', flexWrap: 'nowrap' }}>
+                    <div>
+                        <Notification />
+                    </div>
+                    <div className="NavBar" style={{ display: 'flex', flexWrap: 'nowrap' }}>
                         <Menu />
                         <LoggedInUser />
                     </div>

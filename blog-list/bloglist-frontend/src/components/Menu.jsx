@@ -9,7 +9,7 @@ const Menu = () => {
       paddingRight: 5
     }
     return (
-          <div>
+          <div className='menu'>
               <Link style={padding} to="/">Blogs</Link>
               <Link style={padding} to="/users">Users</Link>
               

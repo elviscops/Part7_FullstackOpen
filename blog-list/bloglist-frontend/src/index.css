@@ -16,7 +16,30 @@
   font-size: 20px;
   
 }
+.NavBar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  
+  .menu {
+    position: relative;
+    flex-grow: 2;
+    text-align: center;
+    justify-content: center;
+  }
+  
+ .NavBar > form {
+    margin-left: auto;
+    position: relative;
+    float: right;
+  }
 
+  .NavBar > span{
+    margin-left: auto;
+    position: relative;
+    float: left;
+  }
 
 .blogPost:hover {
   background-color: #bfbcbc;
@@ -67,6 +90,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .loginScreen form button {
+    margin: 5px;
+
   }
 
 body {
