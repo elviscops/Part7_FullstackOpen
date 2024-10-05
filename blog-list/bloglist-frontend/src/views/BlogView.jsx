@@ -1,17 +1,15 @@
 import Blog from "../components/Blog";
-import { useParams, useMatch } from "react-router-dom"
-import { useEffect, useRef } from "react";
-import BlogForms from "../components/BlogForm";
-import Togglable from "../components/Togglable";
+import { useMatch } from "react-router-dom"
+import { useEffect } from "react";
 import blogService from "../services/blogs";
 import { showNotification, useMessageDispatch } from '../Context/messageContext'
 import { useBlogContent, useBlogDispatch } from '../Context/blogContext'
-import { setUser, useUserContent, useUserDispatch } from '../Context/userContext'
+import {  useUserContent } from '../Context/userContext'
 
 
 
 
-const BlogView = ({blog}) => {
+const BlogView = () => {
     const notificationDispatch = useMessageDispatch();
     const blogs = useBlogContent();
     const blogDispatch = useBlogDispatch();

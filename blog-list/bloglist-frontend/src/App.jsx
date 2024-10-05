@@ -1,18 +1,12 @@
-import { useEffect ,useState} from "react";
-import blogService from "./services/blogs";
-import UserList from "./services/usersHook";
+import { useEffect } from "react";
 import Notification from './components/Notification'
-import { useBlogContent, useBlogDispatch } from './Context/blogContext'
-import {  useUserListContent, useUserListDispatch } from './Context/userListContext'
+import { useBlogContent } from './Context/blogContext'
 import { setUser, useUserContent, useUserDispatch } from './Context/userContext'
 import LoggedInUser from "./components/LoggedInUser";
-import axios from "axios";
 import BlogsView from './views/BlogsView'
 import LoginView from './views/LoginView'
-
 import UsersView from './views/UsersView'
 import Menu from "./components/Menu";
-
 import {
     BrowserRouter as Router,
     Routes, Route, Link, useParams,
@@ -23,10 +17,9 @@ import BlogView from "./views/BlogView";
 
 
 const App = () => {
-    const blogDispatch = useBlogDispatch();
+
     const user = useUserContent();
     const userDispatch = useUserDispatch();
-    let [userListGet] = UserList.getUserList()
     const blogs = useBlogContent();
 
     useEffect(() => {
@@ -46,7 +39,7 @@ const App = () => {
   return (
     <div className="container">
 
-        <div>
+        <div className="container">
             {user !== null && (
                 <>
                     <div>
@@ -54,8 +47,9 @@ const App = () => {
                     </div>
                     <div className="NavBar" style={{ display: 'flex', flexWrap: 'nowrap' }}>
                         <Menu />
-                        <LoggedInUser />
+                        
                     </div>
+                    
                 </>
             )}
         </div>
@@ -92,4 +86,3 @@ const App = () => {
 };
 
 export default App;
-//blog={blogSelected} 

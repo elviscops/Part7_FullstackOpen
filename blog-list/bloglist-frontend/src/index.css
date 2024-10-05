@@ -15,31 +15,6 @@
   font-size: 20px;
   
 }
-.NavBar {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
-  
-  .menu {
-    position: relative;
-    flex-grow: 2;
-    text-align: center;
-    justify-content: center;
-  }
-  
- .NavBar > form {
-    margin-left: auto;
-    position: relative;
-    float: right;
-  }
-
-  .NavBar .loginstatus {
-    margin-left: auto;
-    position: relative;
-    float: left;
-  }
-
 
 
 .blogPost:hover {
@@ -48,32 +23,29 @@
   border: 1px;
   border-style: solid;
   border-color: black;
-  margin: 0 25% 0 25% ;
   border-radius: 5px;
 }
 
-.blogPost {
-  background-color: #a8a8a8;
-  padding: 5px;
-  border: 1px;
-  border-style: solid;
-  border-color: black;
-  margin: 0 25% 0 25% ;
-  border-radius: 0px;
+.loggedin {
+        z-index: 100;
+        display: flex;
+        align-items: right;
+
 }
 
-.viewHideButton {
-  margin: 1px 0px 1px 15px;
+.loggedin span {
+    padding-right: 5px;
 }
+
 
 .loginScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0; /* added background color */
-    padding: 20px; /* added padding to create a little box */
-    border: 1px solid #ccc; /* added border to create a little box */
-    border-radius: 30px; /* added border radius to create a little box */
+    background-color: #f0f0f0; 
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 30px; 
     margin: 10% 30% 0 30%;
   }
   
@@ -98,8 +70,19 @@
 
   }
 
+  .blogPost {
+    background-color: #a8a8a8;
+    padding: 5px;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    /* margin: 0 25% 0 25% ; */
+    border-radius: 3px;
+  }
+
 body {
   background-color: #e9e4d8;
   margin: 0px;
+  padding-top: 70px;
 }
 

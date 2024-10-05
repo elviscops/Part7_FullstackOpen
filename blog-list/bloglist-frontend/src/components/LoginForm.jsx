@@ -1,8 +1,9 @@
 import { handleUsername, handlePassword,useLoginContent, useLoginDispatch } from '../Context/loginContext'
 import { showNotification, useMessageDispatch } from '../Context/messageContext'
-import { setUser,useUserContent,useUserDispatch } from '../Context/userContext'
+import { useUserDispatch } from '../Context/userContext'
 import loginService from "../services/login";
 import blogService from "../services/blogs";
+import { Table, Form, Button } from 'react-bootstrap'
 
 const LoginForm = () => {
 
@@ -38,21 +39,24 @@ const LoginForm = () => {
   return (
     <div className='loginScreen'>
       <h2>Login</h2>
-      <form onSubmit={loginUser}>
+      <Form onSubmit={loginUser}>
+      <Form.Group>
         <div>
-          Username{" "}
-          <input
-            type="text"
-            id="username"
-            value={login.username}
-            onChange={(event) => {
-                handleUsername(loginDispatch,event.target.value)
-            }}
-          />
-        </div>
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+                type="text"
+                id="username"
+                value={login.username}
+                onChange={(event) => {
+                    handleUsername(loginDispatch,event.target.value)
+                }}
+            />
+            </div>
+      </Form.Group>
+      <Form.Group>
         <div>
-          Password{" "}
-          <input
+            <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
             id="password"
             value={login.password}
@@ -61,10 +65,12 @@ const LoginForm = () => {
             }}
           />
         </div>
-        <button id="loginButton" type="submit">
+      </Form.Group>
+      
+        <Button variant="primary" id="loginButton" type="submit">
           Login
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };

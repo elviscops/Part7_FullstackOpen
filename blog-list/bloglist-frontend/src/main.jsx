@@ -25,9 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <UserContextProvider>
                     <BlogContextProvider>
                         <MessageContextProvider>
-                            
-                                <App />
-                            
+                            <App />
                         </MessageContextProvider>
                     </BlogContextProvider>
                 </UserContextProvider>

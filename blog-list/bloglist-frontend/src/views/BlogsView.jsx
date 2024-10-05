@@ -12,7 +12,8 @@ import {
     Routes, Route, Link, useParams,
     useNavigate, useMatch
   } from 'react-router-dom'
-
+  import { Navbar, Nav, Form, FormControl, Button, NavItem, Container,Stack, Row} from 'react-bootstrap';
+ 
 
 
 const BlogsView = () => {
@@ -22,7 +23,10 @@ const BlogsView = () => {
     const user = useUserContent();
     const blogFormRef = useRef();
 
-
+    useEffect(() => {
+        blogService.getAll()
+                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
+    }, [blogDispatch]);
 
     const createNewBlog = async (newBlog) => {
         try {
@@ -57,12 +61,19 @@ const BlogsView = () => {
                                 </Togglable>
                                 <br></br>
                             </div>
-                            <div>
-                                {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
-                                    <div key={blog.id} className="blogPost">
-                                    <Link  to={`/blog/${blog.id}`}>{blog.title} : {blog.author}</Link><br />
-                                    </div>
-                                ))}
+                            <div className="container">
+                            
+                                    {blogs.sort((a, b) => b.likes - a.likes).map((blog) => (
+                                        <div className="blogPost" key={blog.id} >
+                                            <Stack gap={10}>
+                                                <Link style={{color: 'Black', 'textDecoration': 'none'}} to={`/blog/${blog.id}`}>{blog.title} : {blog.author}</Link>
+                                            </Stack>
+                                        </div>
+                                    ))}
+                                
+                               
+
+                                
                             </div>
                         </div>
                     )}

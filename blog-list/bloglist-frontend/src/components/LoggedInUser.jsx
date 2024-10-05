@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { handlePassword, handleUsername, useLoginContent, useLoginDispatch } from '../Context/loginContext'
 import { setUser, useUserContent, useUserDispatch } from '../Context/userContext'   
+import { Navbar, Nav, Form, FormControl, Button, NavItem, Container,Stack, Row} from 'react-bootstrap';
+ 
 
 const LoggedInUser = () => {
     const navigate = useNavigate()
@@ -19,10 +21,10 @@ const LoggedInUser = () => {
     };
 
  return (
-    <div className='loginstatus'>
+    <div className='loggedin'>
         <span>{user.username} has been logged in: </span>
         <form onSubmit={logoutUser} style={{ display: 'inline-block' }}>
-            <button type="submit">Log Out</button>
+            <Button type="submit">Log Out</Button>
         </form>
      </div>
  )

@@ -9,6 +9,7 @@ import {
     useNavigate, useMatch
   } from 'react-router-dom'
   import { useBlogContent, useBlogDispatch } from '../Context/blogContext'
+  import { Navbar,Table, Nav, Form, FormControl, Button, NavItem, Container } from 'react-bootstrap';
 
 
 const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => {
@@ -32,7 +33,6 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => 
     };
 
     const addComment = (event) => {
-        
         postComment(event,blog,comment)
         setComment("")
     }
@@ -50,22 +50,23 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => 
   };
 
   return (
-    <><div className="blogPost">
+    <><div className="blogPost m-auto">
           <div>
               <h2>{blog.title} : {blog.author}</h2>
               <div className="togglableContent">
-                  <div className="urlView">URL: {blog.url}</div>
+                  <Form.Label className="urlView">URL: {blog.url}</Form.Label>
                   <div className="likesView">
-                      Likes: {blog.likes}
-                      <button id="bloglikeBtn" onClick={likeBlog}>
+                    <Form.Label>Likes: </Form.Label>{blog.likes}
+                      <Button id="bloglikeBtn" onClick={likeBlog}>
                           Likes
-                      </button>
+                      </Button>
                   </div>
-                  <div>User: {blog.user.username}</div>
+                  <Form.Label>User:</Form.Label>
+                  <Form.Label>{blog.user.username}</Form.Label>  
                   {blog.user.username === username && (
-                      <button id="removeBlogBtn" onClick={() => deleteBlog(blog.id)}>
+                      <Button  id="removeBlogBtn" onClick={() => deleteBlog(blog.id)}>
                           remove
-                      </button>
+                      </Button>
                   )}
               </div>
           </div>
@@ -73,23 +74,26 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => 
             <div >
                 <h2>Comments:</h2>
                 <div style={{ display: 'flex', flexWrap: 'nowrap' , margin: '2px' }}>
-                    <form onSubmit={addComment}>
+                    <Form onSubmit={addComment}>
                         <div>
                             Comment:{" "}
-                            <input
+                            <Form.Control
                                 type="text"
                                 id="blogtitle"
                                 placeholder="comment"
                                 value={comment}
                                 onChange={(event) => setComment(event.target.value)}
                             />
-                            <button  id="addCommentBtn" type="submit">Add</button>
+                            <Button  id="addCommentBtn" type="submit">Add</Button>
                         </div>
-                    </form>
+                    </Form>
                 </div>
-                <ul>
-                    {blog.comments.map((item,i) => (<li key={i}>{item}</li>))}
-                </ul>
+                <Table>
+                    <tbody>
+                        {blog.comments.map((item,i) => (<tr ><td key={i}>{item}</td></tr>))}
+                    </tbody>
+                    
+                </Table>
           </div>
           </>
   );
