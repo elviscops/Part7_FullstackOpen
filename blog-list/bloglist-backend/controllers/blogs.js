@@ -35,7 +35,8 @@ router.post("/", userExtractor, async (request, response) => {
 
 router.put("/:id/comments", async (request, response) => {
    
-    if ( request.body.comments.length >= 0) {
+    console.log("request ",request.body.comments)
+    if ( request.body.comments.length[0] >= 0) {
         await Blog.findByIdAndUpdate(request.params.id, request.body, {
             new: true,
         });

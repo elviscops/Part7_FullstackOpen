@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import Togglable from "../components/Togglable";
+import blogService from "../services/blogs";
 import {
     BrowserRouter as Router,
     Routes, Route, Link, useParams,
@@ -19,10 +20,14 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
 
     const handleAddComment = async (event) => {
         event.preventDefault();
-        console.log(comment)
-        blogDispatch({type: "COMMENT", payload: comment})
-        setComment("");
 
+        const newBlogComment = {...blog, comments: [...blog.comments,comment]}
+        delete newBlogComment.user
+        console.log(newBlogComment)
+        await blogService.addComment(blog.id,newBlogComment)
+        blogDispatch({type: "COMMENT", payload: newBlogComment})
+        setComment("")
+        //navigate(`/blog/${blog.id}`)
     };
 
   if (!blog) {
@@ -73,33 +78,24 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
           </div>
         </div>
             <div >
-              <h2>Comments:</h2>
-              <div style={{ display: 'flex', flexWrap: 'nowrap' , margin: '2px' }}>
-                 <form onSubmit={handleAddComment}>
-                    <div>
-                    Comment:{" "}
-                    <input
-                        type="text"
-                        id="blogtitle"
-                        placeholder="comment"
-                        value={comment}
-                        onChange={(event) => setComment(event.target.value)}
-                    />
-                    <button  id="addCommentBtn" type="submit">
-                        Add
-                    </button>
-                    </div>
-
+                <h2>Comments:</h2>
+                <div style={{ display: 'flex', flexWrap: 'nowrap' , margin: '2px' }}>
+                    <form onSubmit={handleAddComment}>
+                        <div>
+                            Comment:{" "}
+                            <input
+                                type="text"
+                                id="blogtitle"
+                                placeholder="comment"
+                                value={comment}
+                                onChange={(event) => setComment(event.target.value)}
+                            />
+                            <button  id="addCommentBtn" type="submit">Add</button>
+                        </div>
                     </form>
-              </div>
+                </div>
                 <ul>
-                  
-                    { 
-                        blog.comments.map((item,i) => (
-                            <li key={i}>{item}</li>))
-                        
-                        }
-                    {blog.comments}
+                    {blog.comments.map((item,i) => (<li key={i}>{item}</li>))}
                 </ul>
           </div>
           </>

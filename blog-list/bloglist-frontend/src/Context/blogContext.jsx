@@ -11,7 +11,8 @@ const blogReducer = (state,action) => {
         case "LIKE":
             return state;
         case "COMMENT":
-            return state;
+            console.log("COMMENT ",state,action.payload)
+            return [...state,action.payload];
         default:
             return state;
     }

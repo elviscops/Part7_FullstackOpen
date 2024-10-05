@@ -29,11 +29,12 @@ const like = async (id, likedBlog) => {
   return response.data;
 };
 
-const addComment = async (blog) => {
+const addComment = async (id, blog) => {
     const config = {
       headers: { Authorization: token },
     };
-    const response = await axios.put(`${baseUrl}/${blog.id}/comments`, blog, config);
+    console.log("------->", blog)
+    const response = await axios.put(`${baseUrl}/${id}/comments`, blog, config);
     return response.data;
   };
 
@@ -45,4 +46,4 @@ const deleteBlog = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, like, deleteBlog, setToken };
+export default { getAll, create, like, deleteBlog, addComment, setToken };
