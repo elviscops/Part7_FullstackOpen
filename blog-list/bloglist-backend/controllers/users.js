@@ -35,4 +35,16 @@ router.get("/", async (request, response) => {
   response.json(users);
 });
 
+router.get("/:id", async (request, response) => {
+    const id = request.params.id
+    const users = await User.findById(id).populate('blogs', {
+        url: 1,
+        title: 1,
+        author: 1,
+      })
+      console.log(users)
+    response.json(users);
+  });
+
+
 module.exports = router;

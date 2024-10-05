@@ -34,20 +34,8 @@ const App = () => {
        
     }, [userDispatch]);
 
-    useEffect(() => {
-        blogService.getAll()
-                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
-    }, [blogDispatch]);
-
-    const matchedUsers = useMatch("/users/:id");
-    let userSelected = null
-    if ( matchedUsers != null) {
-        userSelected = userListGet.find((u) => u.id === String(matchedUsers.params.id))
-    } else {
-        null
-    }
-
     const matchedBlogs = useMatch("/blog/:id");
+    
     let blogSelected = null
     if ( matchedBlogs != null) {
         blogSelected = blogs.find((u) => u.id === String(matchedBlogs.params.id))
@@ -56,7 +44,7 @@ const App = () => {
     }
   
   return (
-    <div>
+    <div className="container">
 
         <div>
             {user !== null && (
@@ -90,12 +78,12 @@ const App = () => {
             }></Route>
             <Route path="/users/:id" element={
                 <div>
-                    <SingleUserView user={userSelected} />
+                    <SingleUserView />
                 </div>
             }></Route>
             <Route path="/blog/:id" element={
                 <div>
-                    <BlogView blog={blogSelected} />
+                    <BlogView />
                 </div>
             }></Route>
         </Routes>
@@ -104,3 +92,4 @@ const App = () => {
 };
 
 export default App;
+//blog={blogSelected} 

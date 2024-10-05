@@ -29,5 +29,10 @@ const getUserList = () =>{
     return userList
 }
 
+const getUser = (id) =>{
+    const user = useResource(`http://localhost:3003/api/users/${id}`)
+    return user[0]
+}
 
-export default {getUserList};
+
+export default {getUserList, getUser};

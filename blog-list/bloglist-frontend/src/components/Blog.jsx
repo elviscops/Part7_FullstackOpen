@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useEffect,useState, useRef } from "react";
 import Togglable from "../components/Togglable";
 import blogService from "../services/blogs";
+import axios from "axios";
+import User from "../services/usersHook";
 import {
     BrowserRouter as Router,
     Routes, Route, Link, useParams,
@@ -9,45 +11,36 @@ import {
   import { useBlogContent, useBlogDispatch } from '../Context/blogContext'
 
 
-const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
-  const [blogLikes, setBlogLikes] = useState(blog.likes);
-  const navigate = useNavigate()
-  const blogs = useBlogContent();
-  const blogDispatch = useBlogDispatch();
+const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => {
 
-  const [comment, setComment] = useState([]);
-    
+    const [blogLikes, setBlogLikes] = useState(blog.likes);
+    const navigate = useNavigate()
+    const [comment, setComment] = useState([]);
 
-    const handleAddComment = async (event) => {
-        event.preventDefault();
+    if (!blog) {
+        return null
+    }
 
-        const newBlogComment = {...blog, comments: [...blog.comments,comment]}
-        delete newBlogComment.user
-        console.log(newBlogComment)
-        await blogService.addComment(blog.id,newBlogComment)
-        blogDispatch({type: "COMMENT", payload: newBlogComment})
-        setComment("")
-        //navigate(`/blog/${blog.id}`)
+    const tmpBlog = {
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        user: blog.user.id,
+        comments: blog.comments,
+        id: blog.id,
+        likes: blogLikes + 1,
     };
 
-  if (!blog) {
-    return null
-}
+    const addComment = (event) => {
+        
+        postComment(event,blog,comment)
+        setComment("")
+    }
 
-  const tmpBlog = {
-    title: blog.title,
-    author: blog.author,
-    url: blog.url,
-    user: blog.user.id,
-    comments: blog.comments,
-    id: blog.id,
-    likes: blogLikes + 1,
-  };
-
-  const likeBlog = () => {
-    setBlogLikes(blogLikes + 1);
-    likeBlogPost(tmpBlog.id,tmpBlog);
-  };
+    const likeBlog = () => {
+        setBlogLikes(blogLikes + 1);
+        likeBlogPost(tmpBlog.id,tmpBlog);
+    };
 
   const deleteBlog = (id) => {
     if (window.confirm(`Delete blog ${blog.title} by "${blog.author}`)) {
@@ -80,7 +73,7 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, username }) => {
             <div >
                 <h2>Comments:</h2>
                 <div style={{ display: 'flex', flexWrap: 'nowrap' , margin: '2px' }}>
-                    <form onSubmit={handleAddComment}>
+                    <form onSubmit={addComment}>
                         <div>
                             Comment:{" "}
                             <input

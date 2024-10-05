@@ -21,8 +21,6 @@ router.post("/", userExtractor, async (request, response) => {
     return response.status(400).json({ error: "title or url missing" });
   }
 
-  
-
   blog.likes = blog.likes | 0;
   blog.user = user;
   user.blogs = user.blogs.concat(blog._id);
@@ -34,18 +32,14 @@ router.post("/", userExtractor, async (request, response) => {
 });
 
 router.put("/:id/comments", async (request, response) => {
-   
-    console.log("request ",request.body.comments)
-    if ( request.body.comments.length[0] >= 0) {
+    try{
         await Blog.findByIdAndUpdate(request.params.id, request.body, {
             new: true,
         });
-  
         response.status(201).json(request.body);
-    } else {
-        response.status(400).json({ error: "comment missing" });
+    } catch (error){
+        console.log(error)
     }
-    
   });
 
 router.delete("/:id", userExtractor, async (request, response) => {
@@ -83,5 +77,26 @@ router.put("/:id", async (request, response) => {
   });
   response.json(updatedBlog);
 });
+
+router.get("/:id", async (request, response) => {
+
+    const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
+
+    const body = request.body;
+  
+    const blog = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+    };
+  
+    const foundBlog = await blogs.findById(request.params.id, blog, {
+      new: true,
+    }).populate("user", { username: 1, name: 1 });
+    
+
+    response.json(foundBlog);
+  });
 
 module.exports = router;

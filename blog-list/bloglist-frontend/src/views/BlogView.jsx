@@ -1,4 +1,5 @@
 import Blog from "../components/Blog";
+import { useParams, useMatch } from "react-router-dom"
 import { useEffect, useRef } from "react";
 import BlogForms from "../components/BlogForm";
 import Togglable from "../components/Togglable";
@@ -8,14 +9,44 @@ import { useBlogContent, useBlogDispatch } from '../Context/blogContext'
 import { setUser, useUserContent, useUserDispatch } from '../Context/userContext'
 
 
+
+
 const BlogView = ({blog}) => {
     const notificationDispatch = useMessageDispatch();
     const blogs = useBlogContent();
     const blogDispatch = useBlogDispatch();
     const user = useUserContent();
-    const blogFormRef = useRef();
 
-    if (!blog) {
+    useEffect(() => {
+        blogService.getAll()
+                    .then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
+    }, [blogDispatch]);
+
+    const matchedBlogs = useMatch("/blog/:id");
+
+    let blogSelected = null
+    if ( matchedBlogs != null) {
+        blogSelected = blogs.find((u) => u.id === String(matchedBlogs.params.id))
+    } else {
+        null
+    }
+  
+    const handleAddComment = async (event,blog,comment) => {
+        event.preventDefault()
+        const newBlogComment = {...blog, comments: [...blog.comments,comment]}
+        delete newBlogComment.user
+        await blogService.addComment(blog.id,newBlogComment)
+        blogDispatch({type: "COMMENT", payload: newBlogComment})
+        blogService.getAll().then((blogs) => blogDispatch({type: "GETBLOGS", payload: blogs}));
+        showNotification(notificationDispatch,
+            `comment added ${comment}`,
+             true,
+             3)
+    };
+
+
+
+    if (!blogSelected) {
         return null
     }
 
@@ -42,10 +73,11 @@ return (
     <>
         <div>
             <Blog
-                key={blog.id}
-                blog={blog}
+                key={blogSelected.id}
+                blog={blogSelected}
                 likeBlogPost={likeBlogPost}
                 deleteBlogPost={deleteBlogPost}
+                postComment={handleAddComment}
                 username={user.username} />
         </div>
     </>

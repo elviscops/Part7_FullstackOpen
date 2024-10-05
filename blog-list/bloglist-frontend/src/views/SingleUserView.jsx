@@ -1,6 +1,10 @@
+import { useParams } from "react-router-dom"
+import User from "../services/usersHook";
 
 
-const SingleUserView = ({user}) => {
+const SingleUserView = () => {
+    const {id} = useParams()
+    const user = User.getUser(id)
 
     if (!user) {
         console.log("no user")
@@ -13,7 +17,7 @@ return (
             <h1>{user.name}</h1>
             <h2>Blogs added:</h2>
             <ul>
-                {user.blogs.map(blog => (
+                {user?.blogs?.map(blog => (
                 <li key={blog.id}>
                     {blog.title}
                 </li>

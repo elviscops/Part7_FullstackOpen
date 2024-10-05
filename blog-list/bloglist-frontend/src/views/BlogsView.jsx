@@ -22,6 +22,8 @@ const BlogsView = () => {
     const user = useUserContent();
     const blogFormRef = useRef();
 
+
+
     const createNewBlog = async (newBlog) => {
         try {
             const response = await blogService.create(newBlog)
