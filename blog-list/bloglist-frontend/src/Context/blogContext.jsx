@@ -10,6 +10,8 @@ const blogReducer = (state,action) => {
             return state.filter((i)=> i.id !== action.payload);
         case "LIKE":
             return state;
+        case "COMMENT":
+            return state;
         default:
             return state;
     }

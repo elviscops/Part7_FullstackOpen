@@ -33,6 +33,20 @@ router.post("/", userExtractor, async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
+router.put("/:id/comments", async (request, response) => {
+   
+    if ( request.body.comments.length >= 0) {
+        await Blog.findByIdAndUpdate(request.params.id, request.body, {
+            new: true,
+        });
+  
+        response.status(201).json(request.body);
+    } else {
+        response.status(400).json({ error: "comment missing" });
+    }
+    
+  });
+
 router.delete("/:id", userExtractor, async (request, response) => {
   const user = request.user;
 

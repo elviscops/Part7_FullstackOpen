@@ -29,6 +29,14 @@ const like = async (id, likedBlog) => {
   return response.data;
 };
 
+const addComment = async (blog) => {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const response = await axios.put(`${baseUrl}/${blog.id}/comments`, blog, config);
+    return response.data;
+  };
+
 const deleteBlog = async (id) => {
   const config = {
     headers: { Authorization: token },

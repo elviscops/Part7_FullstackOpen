@@ -1,10 +1,9 @@
-import { useNavigate } from 'react-router'
-import { useEffect ,useState} from "react";
 
 
 const SingleUserView = ({user}) => {
 
     if (!user) {
+        console.log("no user")
         return null
     }
 
