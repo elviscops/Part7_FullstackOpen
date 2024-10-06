@@ -19,7 +19,7 @@ const BlogForm = ({createNewBlog}) => {
     };
   
   return (
-    <div className="container">
+    <div>
       <h2>Add new Blog</h2>
       <Form onSubmit={handleAddBlog}>
         <div className="form-group">

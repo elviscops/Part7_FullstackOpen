@@ -22,10 +22,10 @@ const LoggedInUser = () => {
 
  return (
     <div className='loggedin'>
-        <span>{user.username} has been logged in: </span>
-        <form onSubmit={logoutUser} style={{ display: 'inline-block' }}>
-            <Button type="submit">Log Out</Button>
-        </form>
+        <span><strong>{user.username}:</strong></span>
+        <Form onSubmit={logoutUser} style={{ display: 'inline-block' }}>
+            <Button variant="outline-dark" size="sm" type="submit">Log Out</Button>
+        </Form>
      </div>
  )
    

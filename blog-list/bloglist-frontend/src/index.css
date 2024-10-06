@@ -16,6 +16,10 @@
   
 }
 
+div {
+    padding: auto;
+}
+
 
 .blogPost:hover {
   background-color: #bfbcbc;
@@ -34,7 +38,8 @@
 }
 
 .loggedin span {
-    padding-right: 5px;
+    padding-right: 10px;
+    margin: auto;
 }
 
 
@@ -86,3 +91,6 @@ body {
   padding-top: 70px;
 }
 
+.comment {
+    margin: 5px;
+}

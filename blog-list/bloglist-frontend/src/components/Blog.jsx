@@ -52,22 +52,42 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => 
   return (
     <><div className="blogPost m-auto">
           <div>
-              <h2>{blog.title} : {blog.author}</h2>
-              <div className="togglableContent">
-                  <Form.Label className="urlView">URL: {blog.url}</Form.Label>
-                  <div className="likesView">
-                    <Form.Label>Likes: </Form.Label>{blog.likes}
-                      <Button id="bloglikeBtn" onClick={likeBlog}>
-                          Likes
-                      </Button>
-                  </div>
-                  <Form.Label>User:</Form.Label>
-                  <Form.Label>{blog.user.username}</Form.Label>  
-                  {blog.user.username === username && (
-                      <Button  id="removeBlogBtn" onClick={() => deleteBlog(blog.id)}>
-                          remove
-                      </Button>
-                  )}
+                <div>
+                    <h2>{blog.title} : {blog.author}</h2>
+                <Button variant="outline-primary" onClick={likeBlog}>
+                        Like
+                </Button>
+                </div>
+              
+              <div className="container">
+              <Form>
+                    <Container>
+                        <div>
+                            <div>
+                                <Form.Label className="urlView">URL: {blog.url}</Form.Label>
+                               
+                            </div>
+                            <div>
+                                 <Form.Label>Likes: {blog.likes}</Form.Label>
+                            </div>
+                            <div>
+                                <Form.Label>User: <strong>{blog.user.username}</strong></Form.Label>
+                            </div>
+                        
+                        {blog.user.username === username && (
+                            <div>
+                                <Form.Label>Delete blog:</Form.Label>
+                                <Button  variant="outline-danger" onClick={() => deleteBlog(blog.id)}>Remove</Button>
+                            </div>
+                            
+                        )}
+                        </div>
+                    </Container>
+                    
+
+                  
+              </Form>
+
               </div>
           </div>
         </div>
@@ -90,7 +110,7 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost, postComment, username }) => 
                 </div>
                 <Table>
                     <tbody>
-                        {blog.comments.map((item,i) => (<tr ><td key={i}>{item}</td></tr>))}
+                        {blog.comments.map((item,i) => (<tr className="comment"><td  key={i}>{item}</td></tr>))}
                     </tbody>
                     
                 </Table>

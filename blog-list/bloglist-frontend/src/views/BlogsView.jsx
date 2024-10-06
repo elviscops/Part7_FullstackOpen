@@ -55,7 +55,7 @@ const BlogsView = () => {
                                 <h1>Blogs List Page</h1>
                             </div>
                             <br></br>
-                            <div className="addBlogForm">
+                            <div className="container">
                                 <Togglable buttonLabel="Add New Blog" ref={blogFormRef}>
                                     <BlogForms createNewBlog={createNewBlog} />
                                 </Togglable>
