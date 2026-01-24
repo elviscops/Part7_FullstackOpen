@@ -8,8 +8,6 @@ router.post('/', async (request, response) => {
 
   const user = await User.findOne({ username })
 
-  console.log(user)
-
   try {
     await bcrypt.compare(password, user.passwordHash)
   } catch (error) {
@@ -36,6 +34,7 @@ router.post('/', async (request, response) => {
   response
     .status(200)
     .send({ token, username: user.username, name: user.name })
+  console.group(response)
 })
 
 module.exports = router
